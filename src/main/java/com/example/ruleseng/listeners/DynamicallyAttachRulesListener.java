@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PreAttachDynamicRulesListener implements RulesEngineListener {
+public class DynamicallyAttachRulesListener implements RulesEngineListener {
 
     private final PbMock pbMockData = new PbMock();
     private final RuleConverter ruleConverter;

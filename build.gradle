@@ -15,7 +15,11 @@ configurations {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
+	maven {
+		url "https://repo.maven.apache.org/maven2"
+	}
 }
 
 dependencies {
@@ -25,9 +29,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-// https://mvnrepository.com/artifact/com.h2database/h2
-	implementation group: 'com.h2database', name: 'h2', version: '1.4.194'
-
+	runtimeOnly 'org.postgresql:postgresql'
 
 	implementation 'org.jeasy:easy-rules-core:3.3.0'
 	implementation 'org.jeasy:easy-rules-mvel:3.3.0'

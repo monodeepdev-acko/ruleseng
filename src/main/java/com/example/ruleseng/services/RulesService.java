@@ -1,63 +1,53 @@
 package com.example.ruleseng.services;
 
-import com.example.ruleseng.converter.RuleConverter;
 import com.example.ruleseng.entities.CustomRule;
 import com.example.ruleseng.repositories.CustomRuleRepository;
 import lombok.RequiredArgsConstructor;
-import org.jeasy.rules.api.Rule;
-import org.jeasy.rules.api.Rules;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RulesService {
 
-    private final RuleConverter ruleConverter;
-    private final Rules rules;
     private final CustomRuleRepository ruleRepository;
 
-    public Iterable<CustomRule> findAll() {
-        return ruleRepository.findAll();
-    }
+    public List<CustomRule> findAll() {
 
-    public Iterable<CustomRule> findByChannel(String channel) {
-        return ruleRepository.findByChannel(channel);
-    }
-
-    public CustomRule findById(String name) {
-        Optional<CustomRule> maybeRule = ruleRepository.findById(name);
-        return maybeRule.orElse(null);
-    }
-
-    public void registerChannelRules(String channel) {
-        for (CustomRule customRule : findByChannel(channel)) {
-            rules.register(ruleConverter.convertToRule(customRule));
+        List<CustomRule> rules = new ArrayList<>();
+        for (CustomRule rule : ruleRepository.findAll()) {
+            rules.add(rule);
         }
+        return rules;
     }
 
-    public void unregisterChannelRules(String channel) {
-        for (CustomRule customRule : findByChannel(channel)) {
-            rules.unregister(customRule.getName());
+    public List<CustomRule> findByChannel(String channel) {
+
+        List<CustomRule> rules = new ArrayList<>();
+        for (CustomRule rule : ruleRepository.findByChannel(channel)) {
+            rules.add(rule);
         }
+        return rules;
     }
 
-    public void registerNewRules(List<Rule> ruleList) {
-        for (Rule rule : ruleList) {
-            rules.register(rule);
-        }
+    public CustomRule findById(String id) {
+        return ruleRepository.findById(id).orElse(null);
     }
 
-    public CustomRule save(CustomRule rule) {
+    public CustomRule findByName(String name) {
+        return ruleRepository.findByName(name).orElse(null);
+    }
 
-        try {
-            ruleRepository.save(rule);
-            rules.register(ruleConverter.convertToRule(rule));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Name should be unique: " + rule);
+    @Transactional
+    public List<CustomRule> saveAll(List<CustomRule> rules) {
+        List<CustomRule> results = new ArrayList<>();
+        for (CustomRule rule: rules) {
+            results.add(ruleRepository.save(rule));
         }
-        return rule;
+        return results;
     }
 
     public void delete(String name) {

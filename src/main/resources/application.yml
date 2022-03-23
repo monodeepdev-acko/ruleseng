@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    # driver: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: monodeep.das
+    password: postgres
+    testOnBorrow: true
+    validationQuery: SELECT 1
+    initialSize: 2
+    minIdle: 2
+    maxActive: 5
+    maxIdle: 5
+    maxWait: 1000
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+hibernate:
+  batch:
+    size: 20
+  current:
+    session:
+      context:
+        class: org.springframework.orm.hibernate5.SpringSessionContext
+  dialect: org.hibernate.dialect.PostgreSQLDialect
+  format_sql: true
+  mode: validate
+  show_sql: true
