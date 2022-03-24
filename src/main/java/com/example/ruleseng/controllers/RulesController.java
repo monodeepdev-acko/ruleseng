@@ -23,20 +23,26 @@ public class RulesController {
     public ResponseEntity<?> getAllRules(@RequestParam Map<String, String> requestParams) {
 
         List<CustomRule> results = new ArrayList<>();
-        if (Objects.isNull(requestParams)) {
+
+        if (Objects.isNull(requestParams) || requestParams.size() == 0) {
             results = rulesService.findAll();
+        } else if (requestParams.containsKey("id")) {
+            results.add(rulesService.findById(requestParams.get("id")));
         } else if (requestParams.containsKey("name")) {
             results.add(rulesService.findByName(requestParams.get("name")));
         } else if (requestParams.containsKey("channel")) {
             results.addAll(rulesService.findByChannel(requestParams.get("channel")));
-        } else if (requestParams.containsKey("id")) {
-            results.add(rulesService.findById(requestParams.get("id")));
         }
-        return new ResponseEntity(rulesService, HttpStatus.OK);
+        return new ResponseEntity(results, HttpStatus.OK);
     }
 
     @PostMapping("/")
     public List<CustomRule> createRule(@RequestBody List<CustomRule> customRules) {
         return rulesService.saveAll(customRules);
+    }
+
+    @DeleteMapping("/")
+    public void deleteRules(@RequestParam Map<String, String> requestParams) {
+        rulesService.delete(requestParams);
     }
 }

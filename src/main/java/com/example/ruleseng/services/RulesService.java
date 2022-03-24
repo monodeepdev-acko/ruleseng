@@ -5,9 +5,7 @@ import com.example.ruleseng.repositories.CustomRuleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -41,16 +39,23 @@ public class RulesService {
         return ruleRepository.findByName(name).orElse(null);
     }
 
-    @Transactional
     public List<CustomRule> saveAll(List<CustomRule> rules) {
         List<CustomRule> results = new ArrayList<>();
         for (CustomRule rule: rules) {
+            rule.setId(UUID.randomUUID().toString());
             results.add(ruleRepository.save(rule));
         }
         return results;
     }
 
-    public void delete(String name) {
-        ruleRepository.deleteById(name);
+    public void delete(Map<String, String> filterParams) {
+
+        if (Objects.isNull(filterParams) || filterParams.size() == 0) {
+            ruleRepository.deleteAll();
+        } else if (filterParams.containsKey("id")) {
+            ruleRepository.deleteById(findById(filterParams.get("id")).getId());
+        } else if (filterParams.containsKey("name")) {
+            ruleRepository.deleteById(findById(filterParams.get("name")).getId());
+        }
     }
 }

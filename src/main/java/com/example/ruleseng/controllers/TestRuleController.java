@@ -1,9 +1,13 @@
 package com.example.ruleseng.controllers;
 
+import com.example.ruleseng.models.Context;
 import com.example.ruleseng.services.RulesExecutorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/debug")
@@ -12,8 +16,9 @@ public class TestRuleController {
 
     private final RulesExecutorService rulesExecutorService;
 
-//    @PostMapping(value = "/is-it-raining/{isRaining}")
-//    public ResponseEntity<?> justify(@PathVariable("isRaining") Boolean isRaining) {
-//        return new ResponseEntity(rulesExecutorService.executeRules(isRaining), HttpStatus.OK);
-//    }
+    @PostMapping(value = "/test-rule/{channel}")
+    public ResponseEntity<?> justify(@PathVariable("channel") String channel, @RequestBody Map<String, Object> context) {
+        return new ResponseEntity(rulesExecutorService.execute(channel, context),
+                HttpStatus.OK);
+    }
 }

@@ -14,24 +14,23 @@ public class MyRuleListener implements RuleListener {
 
     @Override
     public boolean beforeEvaluate(Rule rule, Facts facts) {
-//        log.info("beforeEvaluate: {}, facts: {}", rule, facts);
+        log.info("beforeEvaluate: rule: {}, facts: {}", rule, facts);
         return true;
     }
 
     @Override
     public void afterEvaluate(Rule rule, Facts facts, boolean evaluationResult) {
-        if (evaluationResult)
-            log.info("afterEvaluate: {}, facts: {}: result: {}", rule, facts, evaluationResult);
+        log.info("afterEvaluate: rule: {}, facts: {}: result: {}", rule, facts, evaluationResult);
     }
 
     @Override
     public void beforeExecute(Rule rule, Facts facts) {
-//        log.info("beforeExecute: {}, facts: {}", rule, facts);
+        log.info("beforeExecute: rule: {}, facts: {}", rule, facts);
     }
 
     @Override
     public void onSuccess(Rule rule, Facts facts) {
-//        log.info("onSuccess: {}, facts: {}", rule.getName(), facts);
+        log.info("onSuccess: rule: {}, facts: {}", rule.getName(), facts);
     }
 
     @Override
