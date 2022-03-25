@@ -1,6 +1,5 @@
 package com.example.ruleseng.controllers;
 
-import com.example.ruleseng.models.Context;
 import com.example.ruleseng.services.RulesExecutorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

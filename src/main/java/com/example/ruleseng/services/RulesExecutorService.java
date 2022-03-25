@@ -4,7 +4,6 @@ import com.example.ruleseng.converter.RuleConverter;
 import com.example.ruleseng.entities.CustomRule;
 import com.example.ruleseng.listeners.DynamicallyAttachRulesListener;
 import com.example.ruleseng.listeners.MyRuleListener;
-import com.example.ruleseng.models.Context;
 import lombok.RequiredArgsConstructor;
 import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
@@ -14,6 +13,7 @@ import org.jeasy.rules.core.DefaultRulesEngine;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +32,11 @@ public class RulesExecutorService {
     private final String BUY_ENGINE_KEY = "buy_engine_engine";
     private final String ENDORSEMENT_ENGINE_KEY = "endorsement_engine_engine";
     private final String RENEWAL_ENGINE_KEY = "renewal_engine_engine";
+
+    private final String CONTEXT_KEY = "context";
+    private final String RESULTS_KEY = "results";
+    private final String ADDITIONAL_RULES = "additional_rules";
+
 
     @PostConstruct
     public void initializeRuleEngines() {
@@ -59,8 +64,15 @@ public class RulesExecutorService {
     }
 
     public Facts createFacts(Map<String, Object> contextObj) {
+//    public Facts createFacts(Context contextObj) {
         Facts facts = new Facts();
-        facts.put("context", contextObj);
+        facts.put(CONTEXT_KEY, contextObj);
+        facts.put(RESULTS_KEY, new HashMap<>());
+
+        if (contextObj.containsKey(ADDITIONAL_RULES)) {
+            facts.put(ADDITIONAL_RULES, contextObj.get(ADDITIONAL_RULES));
+        }
+
         return facts;
     }
 
@@ -75,6 +87,7 @@ public class RulesExecutorService {
     }
 
     public Object execute(String channel, Map<String, Object> contextObj) {
+//    public Object execute(String channel, Context contextObj) {
         Facts facts = createFacts(contextObj);
         Rules rules = registerRules(channel);
         RulesEngine engine = getRulesEngine(channel);
